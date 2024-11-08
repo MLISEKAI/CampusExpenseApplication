@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFC1E3"
+    android:background="#FFFFFF"
     android:padding="16dp"
     tools:context=".Home">
 
@@ -16,12 +16,10 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="#FADBDF"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
+            app:cardElevation="0dp"
             >
 
             <LinearLayout
@@ -37,25 +35,25 @@
                     android:textSize="28sp"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:layout_marginBottom="24dp"
-                    android:textColor="#333333"/>
+                    android:textColor="#ff6c17"
+                    android:layout_marginBottom="24dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Total Expenses: 0 VND"
-                    android:textSize="20sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:id="@+id/tvTotalExpenses"
                     android:layout_marginBottom="16dp"
-                    android:textColor="#555555"/>
+                    android:textColor="#00712D"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="#F7DCB9"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="6dp"
                     app:contentPadding="16dp">
@@ -70,7 +68,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Choose a category to see total expenses"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:layout_marginBottom="16dp"
                             android:layout_marginTop="8dp"
                             android:textColor="#333333"/>
@@ -78,11 +76,11 @@
                         <Spinner
                             android:id="@+id/spinnerCategories"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="48dp"
                             android:layout_marginBottom="16dp"
-                            android:padding="8dp"
-                            android:background="#E1B0B0"
-                            />
+                            android:background="#FFFFFF"
+                            android:padding="8dp" />
+
 
                         <TextView
                             android:layout_width="match_parent"
@@ -91,7 +89,7 @@
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:id="@+id/tvTotalByCategory"
-                            android:textColor="#555555"/>
+                            android:textColor="#00712D"/>
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>

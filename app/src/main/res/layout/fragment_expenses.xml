@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#FFC1E3"
+    android:background="#FFFFFF"
     tools:context=".Expenses">
 
     <androidx.cardview.widget.CardView
@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#F6D6DB"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardElevation="0dp"
         app:contentPadding="16dp">
 
         <LinearLayout
@@ -33,6 +32,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:gravity="center"
+                android:textColor="#ff6c17"
                 android:layout_marginBottom="16dp"
                 />
             <TextView
@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Total Expenses: 0 VND"
+                android:textColor="#00712D"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
@@ -49,7 +50,7 @@
                 android:text="Add Expense"
                 android:id="@+id/btnAddExpense"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="#F67979"
+                android:backgroundTint="#ff6c17"
                 />
 
 
@@ -61,9 +62,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#F6D5DA"
+        app:cardBackgroundColor="#F7DCB9"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:contentPadding="16dp">

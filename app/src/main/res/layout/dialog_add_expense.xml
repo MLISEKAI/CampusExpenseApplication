@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#FFFFFF"
     android:padding="16dp"
     >
 
@@ -11,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="#FFC1E3"
-        app:boxStrokeColor="#FF4081"
-        app:hintTextColor="#FF4081">
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#ff6c17"
+        app:hintTextColor="#ff6c17">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etAmount"
@@ -27,9 +28,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="#FFC1E3"
-        app:boxStrokeColor="#FF4081"
-        app:hintTextColor="#FF4081">
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#ff6c17"
+        app:hintTextColor="#ff6c17">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTitle"
@@ -42,9 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="#FFC1E3"
-        app:boxStrokeColor="#FF4081"
-        app:hintTextColor="#FF4081">
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#ff6c17"
+        app:hintTextColor="#ff6c17">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etDescription"
@@ -57,9 +58,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="#FFC1E3"
-        app:boxStrokeColor="#FF4081"
-        app:hintTextColor="#FF4081">
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#ff6c17"
+        app:hintTextColor="#ff6c17">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCategory"
@@ -72,9 +73,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="#FFC1E3"
-        app:boxStrokeColor="#FF4081"
-        app:hintTextColor="#FF4081">
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#ff6c17"
+        app:hintTextColor="#ff6c17">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etDate"

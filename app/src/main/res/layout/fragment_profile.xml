@@ -7,7 +7,7 @@ android:layout_height="match_parent"
 android:orientation="vertical"
 android:padding="16dp"
 android:gravity="center"
-android:background="#FFC1E3"
+android:background="#FFFFFF"
 tools:context=".Profile">
 
 <androidx.cardview.widget.CardView
@@ -15,9 +15,7 @@ tools:context=".Profile">
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
-    app:cardBackgroundColor="#FADBDF"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
+    app:cardElevation="0dp"
     app:contentPadding="16dp">
 
     <LinearLayout
@@ -32,6 +30,7 @@ tools:context=".Profile">
             android:text="PROFILE INFOMATION"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="#ff6c17"
             android:gravity="center"
             android:layout_marginBottom="16dp"
             />
@@ -41,7 +40,7 @@ tools:context=".Profile">
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#FF8A80">
+            app:boxStrokeColor="#ff6c17">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtUsername"
@@ -49,7 +48,7 @@ tools:context=".Profile">
                 android:layout_height="wrap_content"
                 android:hint="Username"
                 android:enabled="false"
-                android:textColor="#FF8A80"
+                android:textColor="#ff6c17"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +57,7 @@ tools:context=".Profile">
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#FF8A80">
+            app:boxStrokeColor="#ff6c17">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtEmail"
@@ -66,7 +65,7 @@ tools:context=".Profile">
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:textColor="#FF8A80"
+                android:textColor="#ff6c17"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +74,7 @@ tools:context=".Profile">
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#FF8A80">
+            app:boxStrokeColor="#ff6c17">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtPhone"
@@ -83,7 +82,7 @@ tools:context=".Profile">
                 android:layout_height="wrap_content"
                 android:hint="Phone"
                 android:inputType="phone"
-                android:textColor="#FF8A80"
+                android:textColor="#ff6c17"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +91,7 @@ tools:context=".Profile">
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#FF8A80">
+            app:boxStrokeColor="#ff6c17">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtOldPassword"
@@ -100,7 +99,7 @@ tools:context=".Profile">
                 android:layout_height="wrap_content"
                 android:hint="Old Password"
                 android:inputType="textPassword"
-                android:textColor="#FF8A80"
+                android:textColor="#ff6c17"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,7 +108,7 @@ tools:context=".Profile">
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#FF8A80">
+            app:boxStrokeColor="#ff6c17">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtNewPassword"
@@ -117,7 +116,7 @@ tools:context=".Profile">
                 android:layout_height="wrap_content"
                 android:hint="New Password"
                 android:inputType="textPassword"
-                android:textColor="#FF8A80"
+                android:textColor="#ff6c17"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,16 +126,17 @@ tools:context=".Profile">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Update Account Info"
-            android:backgroundTint="#62CD67"
+            android:backgroundTint="#ff6c17"
             android:textColor="#FFFFFF"
             android:layout_marginTop="16dp"
             android:padding="12dp" />
         <Button
             android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:backgroundTint="#FB1804"
+            android:text="Log out"
+            android:backgroundTint="#FA4032"
+            android:layout_gravity="end"
             android:textColor="#FFFFFF"
             android:layout_marginTop="16dp"
             android:padding="12dp" />
