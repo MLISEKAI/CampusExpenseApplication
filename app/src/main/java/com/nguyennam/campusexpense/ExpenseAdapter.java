@@ -137,30 +137,47 @@ public class ExpenseAdapter extends BaseAdapter {
 
         // Set dialog buttons
         builder.setPositiveButton("Save", (dialog, which) -> {
-            expense.setTitle(etTitle.getText().toString());
-            try {
-                String amountText = etAmount.getText().toString().replace(",", "");
-                expense.setAmount(Long.parseLong(amountText));
-            } catch (NumberFormatException e) {
-                expense.setAmount(0);
+            String title = etTitle.getText().toString().trim();
+            String amountText = etAmount.getText().toString().trim();
+            String category = etCategory.getText().toString().trim();
+            String date = etDate.getText().toString().trim();
+
+            if (title.isEmpty() || amountText.isEmpty() || category.isEmpty() || date.isEmpty()) {
+                Toast.makeText(context, "Please fill in all required fields.", Toast.LENGTH_SHORT).show();
+                return;
             }
-            expense.setCategory(etCategory.getText().toString());
-            expense.setDescription(etDescription.getText().toString());
-            expense.setDate(etDate.getText().toString());
 
-            Expense expenseDb = new Expense(context, null);
-            boolean isUpdated = expenseDb.update(expense.getId(), expense.getAmount(), expense.getTitle(),
-                    expense.getDescription(), expense.getCategory(), expense.getDate(), expense.getUserCreatedId());
+            try {
+                expense.setTitle(title);
+                expense.setAmount(Long.parseLong(amountText.replace(",", "")));
+                expense.setCategory(category);
+                expense.setDescription(etDescription.getText().toString().trim());
+                expense.setDate(date);
 
-            if (isUpdated) {
-                if (listener != null) {
-                    listener.onExpenseUpdated();
+                Expense expenseDb = new Expense(context, null);
+                boolean isUpdated = expenseDb.update(
+                        expense.getId(),
+                        expense.getAmount(),
+                        expense.getTitle(),
+                        expense.getDescription(),
+                        expense.getCategory(),
+                        expense.getDate(),
+                        expense.getUserCreatedId()
+                );
+
+                if (isUpdated) {
+                    if (listener != null) {
+                        listener.onExpenseUpdated();
+                    }
+                    Toast.makeText(context, "Expense updated successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Failed to update expense.", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(context, "Expense updated successfully!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "Failed to update expense.", Toast.LENGTH_SHORT).show();
+            } catch (NumberFormatException e) {
+                Toast.makeText(context, "Invalid amount entered.", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         builder.setNegativeButton("Delete", (dialog, which) -> {
             Expense expenseDb = new Expense(context, null);
