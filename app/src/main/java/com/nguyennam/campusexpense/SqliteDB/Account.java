@@ -47,12 +47,17 @@ public class Account extends SQLiteOpenHelper {
     public long insert(String email, String username, String phone, String password) {
         SQLiteDatabase db = getWritableDatabase();
 
-        // Check if email and username already exist
-        if (isEmailExists(email) || isUsernameExists(username)) {
-            return -1;
+        // Kiểm tra trùng email
+        if (isEmailExists(email)) {
+            return -2; // Mã lỗi trùng email
         }
 
-        // Insert if not exists
+        // Kiểm tra trùng username
+        if (isUsernameExists(username)) {
+            return -3; // Mã lỗi trùng username
+        }
+
+        // Thêm dữ liệu nếu không trùng
         ContentValues values = new ContentValues();
         values.put(EMAIL, email);
         values.put(USERNAME, username);
@@ -61,6 +66,7 @@ public class Account extends SQLiteOpenHelper {
 
         return db.insert(TABLE_NAME, null, values);
     }
+
 
     private boolean isEmailExists(String email) {
         SQLiteDatabase db = getReadableDatabase();

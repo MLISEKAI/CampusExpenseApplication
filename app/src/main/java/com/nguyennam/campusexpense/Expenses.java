@@ -2,6 +2,7 @@ package com.nguyennam.campusexpense;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,9 +28,11 @@ import com.nguyennam.campusexpense.Model.User;
 import com.nguyennam.campusexpense.SqliteDB.Account;
 import com.nguyennam.campusexpense.SqliteDB.Expense;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -104,31 +107,63 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
         final EditText etCategory = dialogView.findViewById(R.id.etCategory);
         final EditText etDate = dialogView.findViewById(R.id.etDate);
 
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-        String strDate = formatter.format(date);
-        etDate.setText(strDate);
+        Calendar calendar = Calendar.getInstance();
+
+        // Định dạng chỉ hiển thị ngày
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        // Hiển thị lịch khi người dùng bấm vào EditText
+        etDate.setOnClickListener(v -> {
+            // Lấy ngày, tháng, năm hiện tại từ Calendar
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            // Tạo DatePickerDialog
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getContext(),
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        // Cập nhật Calendar với ngày được chọn
+                        calendar.set(Calendar.YEAR, selectedYear);
+                        calendar.set(Calendar.MONTH, selectedMonth);
+                        calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+
+                        // Định dạng lại ngày và hiển thị trong EditText
+                        etDate.setText(formatter.format(calendar.getTime()));
+                    },
+                    year, month, day
+            );
+
+            // Hiển thị DatePickerDialog
+            datePickerDialog.show();
+        });
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                long amount = Long.parseLong(etAmount.getText().toString().trim());
+                String amountText = etAmount.getText().toString().trim();
                 String title = etTitle.getText().toString().trim();
                 String description = etDescription.getText().toString().trim();
                 String category = etCategory.getText().toString().trim();
                 String date = etDate.getText().toString().trim();
 
-                if(amount == 0 || title.isEmpty() || description.isEmpty() || category.isEmpty() || date.isEmpty()){
+                if (amountText.isEmpty() || title.isEmpty() || description.isEmpty() || category.isEmpty() || date.isEmpty()) {
                     Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                long amount;
+                try {
+                    amount = Long.parseLong(amountText);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 long data = db.insert(amount, title, description, category, date, userId);
                 if (data == -1) {
-                    // khong tao thanh cong expense
-                     Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
                 } else {
-                    // tao thanh cong
                     Toast.makeText(getContext(), "Create success", Toast.LENGTH_SHORT).show();
                     loadTotalExpenses();
                     loadExpenses();
@@ -141,6 +176,7 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
     @Override
     public void onExpenseUpdated() {

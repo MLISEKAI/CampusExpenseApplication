@@ -2,6 +2,7 @@ package com.nguyennam.campusexpense;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ import com.nguyennam.campusexpense.Model.ExpenseModel;
 import com.nguyennam.campusexpense.SqliteDB.Expense;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -98,6 +101,7 @@ public class ExpenseAdapter extends BaseAdapter {
         final EditText etDescription = dialogView.findViewById(R.id.etDescription);
         final EditText etDate = dialogView.findViewById(R.id.etDate);
 
+        // Populate data into fields
         etTitle.setText(expense.getTitle());
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         String formattedAmount = numberFormat.format(expense.getAmount());
@@ -106,58 +110,72 @@ public class ExpenseAdapter extends BaseAdapter {
         etDescription.setText(expense.getDescription());
         etDate.setText(expense.getDate());
 
+        // Set up calendar and formatter for date selection
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        // Set up click listener for etDate to show DatePickerDialog
+        etDate.setOnClickListener(v -> {
+            String[] dateParts = expense.getDate().split("/");
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            // If a valid date is already present, parse and set it as default
+            if (dateParts.length == 3) {
+                year = Integer.parseInt(dateParts[2]);
+                month = Integer.parseInt(dateParts[1]) - 1; // Month is 0-based
+                day = Integer.parseInt(dateParts[0]);
+            }
+
+            // Show DatePickerDialog
+            new DatePickerDialog(context, (view, selectedYear, selectedMonth, selectedDay) -> {
+                calendar.set(selectedYear, selectedMonth, selectedDay);
+                etDate.setText(dateFormatter.format(calendar.getTime()));
+            }, year, month, day).show();
+        });
+
         // Set dialog buttons
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                expense.setTitle(etTitle.getText().toString());
-                try {
-                    String amountText = etAmount.getText().toString().replace(",", "");
-                    expense.setAmount(Long.parseLong(amountText));
-                } catch (NumberFormatException e) {
-                    expense.setAmount(0);
-                }
-                expense.setCategory(etCategory.getText().toString());
-                expense.setDescription(etDescription.getText().toString());
-                expense.setDate(etDate.getText().toString());
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            expense.setTitle(etTitle.getText().toString());
+            try {
+                String amountText = etAmount.getText().toString().replace(",", "");
+                expense.setAmount(Long.parseLong(amountText));
+            } catch (NumberFormatException e) {
+                expense.setAmount(0);
+            }
+            expense.setCategory(etCategory.getText().toString());
+            expense.setDescription(etDescription.getText().toString());
+            expense.setDate(etDate.getText().toString());
 
-                Expense expenseDb = new Expense(context, null);
-                boolean isUpdated = expenseDb.update(expense.getId(), expense.getAmount(), expense.getTitle(),
-                        expense.getDescription(), expense.getCategory(), expense.getDate(), expense.getUserCreatedId());
+            Expense expenseDb = new Expense(context, null);
+            boolean isUpdated = expenseDb.update(expense.getId(), expense.getAmount(), expense.getTitle(),
+                    expense.getDescription(), expense.getCategory(), expense.getDate(), expense.getUserCreatedId());
 
-                if (isUpdated) {
-                    if (listener != null) {
-                        listener.onExpenseUpdated();
-                    }
-                    Toast.makeText(context, "Expense updated successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Failed to update expense.", Toast.LENGTH_SHORT).show();
+            if (isUpdated) {
+                if (listener != null) {
+                    listener.onExpenseUpdated();
                 }
+                Toast.makeText(context, "Expense updated successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Failed to update expense.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Expense expenseDb = new Expense(context, null);
-                boolean isDeleted = expenseDb.delete(expense.getId());
-                if (isDeleted) {
-                    if (listener != null) {
-                        listener.onExpenseUpdated();
-                    }
-                    Toast.makeText(context, "Expense deleted successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Failed to delete expense.", Toast.LENGTH_SHORT).show();
+        builder.setNegativeButton("Delete", (dialog, which) -> {
+            Expense expenseDb = new Expense(context, null);
+            boolean isDeleted = expenseDb.delete(expense.getId());
+            if (isDeleted) {
+                if (listener != null) {
+                    listener.onExpenseUpdated();
                 }
+                Toast.makeText(context, "Expense deleted successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Failed to delete expense.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setNeutralButton("Cancel", (dialog, which) -> dialog.dismiss());
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
@@ -180,6 +198,7 @@ public class ExpenseAdapter extends BaseAdapter {
             neutralButton.setTextColor(Color.GRAY); // Customize color for Cancel button
         }
     }
+
 
 
 }

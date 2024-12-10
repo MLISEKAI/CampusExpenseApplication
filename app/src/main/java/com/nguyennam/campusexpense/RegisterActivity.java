@@ -54,10 +54,15 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
         long result = new Account(this).insert(email, username, phone, password);
-        if (result == -1){
-            Toast.makeText(this, "Failed to register account", Toast.LENGTH_SHORT).show();
+        if (result == -2) {
+            Toast.makeText(RegisterActivity.this, "Email already exists!", Toast.LENGTH_SHORT).show();
+        } else if (result == -3) {
+            Toast.makeText(RegisterActivity.this, "Username already exists!", Toast.LENGTH_SHORT).show();
+        } else if (result == -1) {
+            Toast.makeText(RegisterActivity.this, "Failed to register. Try again.", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Register successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+            finish(); // Quay lại màn hình trước
         }
 
 
