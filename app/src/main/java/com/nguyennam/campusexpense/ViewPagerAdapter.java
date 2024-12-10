@@ -15,13 +15,13 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new Home();
+                return new BudgetFragment();
             case 1:
                 return new Expenses();
             case 2:
                 return new Profile();
             default:
-                return new Home();
+                return new BudgetFragment();
         }
     }
 

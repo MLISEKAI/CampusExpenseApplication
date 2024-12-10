@@ -97,52 +97,52 @@ public class ExpenseAdapter extends BaseAdapter {
         // Find and set the views
         final EditText etTitle = dialogView.findViewById(R.id.etTitle);
         final EditText etAmount = dialogView.findViewById(R.id.etAmount);
-        final EditText etCategory = dialogView.findViewById(R.id.etCategory);
+//        final EditText etCategory = dialogView.findViewById(R.id.etCategory);
         final EditText etDescription = dialogView.findViewById(R.id.etDescription);
-        final EditText etDate = dialogView.findViewById(R.id.etDate);
+//        final EditText etDate = dialogView.findViewById(R.id.etDate);
 
         // Populate data into fields
         etTitle.setText(expense.getTitle());
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         String formattedAmount = numberFormat.format(expense.getAmount());
         etAmount.setText(formattedAmount);
-        etCategory.setText(expense.getCategory());
+//        etCategory.setText(expense.getCategory());
         etDescription.setText(expense.getDescription());
-        etDate.setText(expense.getDate());
+//        etDate.setText(expense.getDate());
 
         // Set up calendar and formatter for date selection
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-        // Set up click listener for etDate to show DatePickerDialog
-        etDate.setOnClickListener(v -> {
-            String[] dateParts = expense.getDate().split("/");
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-            // If a valid date is already present, parse and set it as default
-            if (dateParts.length == 3) {
-                year = Integer.parseInt(dateParts[2]);
-                month = Integer.parseInt(dateParts[1]) - 1; // Month is 0-based
-                day = Integer.parseInt(dateParts[0]);
-            }
-
-            // Show DatePickerDialog
-            new DatePickerDialog(context, (view, selectedYear, selectedMonth, selectedDay) -> {
-                calendar.set(selectedYear, selectedMonth, selectedDay);
-                etDate.setText(dateFormatter.format(calendar.getTime()));
-            }, year, month, day).show();
-        });
+//        // Set up click listener for etDate to show DatePickerDialog
+//        etDate.setOnClickListener(v -> {
+//            String[] dateParts = expense.getDate().split("/");
+//            int year = calendar.get(Calendar.YEAR);
+//            int month = calendar.get(Calendar.MONTH);
+//            int day = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//            // If a valid date is already present, parse and set it as default
+//            if (dateParts.length == 3) {
+//                year = Integer.parseInt(dateParts[2]);
+//                month = Integer.parseInt(dateParts[1]) - 1; // Month is 0-based
+//                day = Integer.parseInt(dateParts[0]);
+//            }
+//
+//            // Show DatePickerDialog
+//            new DatePickerDialog(context, (view, selectedYear, selectedMonth, selectedDay) -> {
+//                calendar.set(selectedYear, selectedMonth, selectedDay);
+//                etDate.setText(dateFormatter.format(calendar.getTime()));
+//            }, year, month, day).show();
+//        });
 
         // Set dialog buttons
         builder.setPositiveButton("Save", (dialog, which) -> {
             String title = etTitle.getText().toString().trim();
             String amountText = etAmount.getText().toString().trim();
-            String category = etCategory.getText().toString().trim();
-            String date = etDate.getText().toString().trim();
+//            String category = etCategory.getText().toString().trim();
+//            String date = etDate.getText().toString().trim();
 
-            if (title.isEmpty() || amountText.isEmpty() || category.isEmpty() || date.isEmpty()) {
+            if (title.isEmpty() || amountText.isEmpty()) {
                 Toast.makeText(context, "Please fill in all required fields.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -150,9 +150,9 @@ public class ExpenseAdapter extends BaseAdapter {
             try {
                 expense.setTitle(title);
                 expense.setAmount(Long.parseLong(amountText.replace(",", "")));
-                expense.setCategory(category);
+//                expense.setCategory(category);
                 expense.setDescription(etDescription.getText().toString().trim());
-                expense.setDate(date);
+//                expense.setDate(date);
 
                 Expense expenseDb = new Expense(context, null);
                 boolean isUpdated = expenseDb.update(

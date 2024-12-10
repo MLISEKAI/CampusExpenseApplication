@@ -54,34 +54,5 @@
             android:hint="Description"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="#FFFFFF"
-        app:boxStrokeColor="#ff6c17"
-        app:hintTextColor="#ff6c17">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Category"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="#FFFFFF"
-        app:boxStrokeColor="#ff6c17"
-        app:hintTextColor="#ff6c17">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Date"
-            android:inputType="date"/>
-    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

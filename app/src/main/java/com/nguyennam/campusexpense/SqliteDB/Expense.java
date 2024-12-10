@@ -11,11 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.nguyennam.campusexpense.Model.ExpenseModel;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class Expense extends SQLiteOpenHelper {
 
@@ -61,15 +58,15 @@ public class Expense extends SQLiteOpenHelper {
 
     }
 
-    public long insert(long amount, String title, String description, String category, String date, int user_create_id) {
+    public long insert(long amount, String title, String description, int user_create_id) {
         SQLiteDatabase db = getWritableDatabase();
         // Insert if not exists
         ContentValues values = new ContentValues();
         values.put(AMOUNT, amount);
         values.put(TITLE, title);
         values.put(DESCRIPTION, description);
-        values.put(CATEGORY, category);
-        values.put(DATE, date);
+//        values.put(CATEGORY, category);
+//        values.put(DATE, date);
         values.put(USER_CREATED_ID, user_create_id);
         return db.insert(TABLE_NAME, null, values);
     }
