@@ -81,7 +81,7 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         String formattedAmount = numberFormat.format(totalExpenses);
 
-        tvTotalExpenses.setText("Total expenses: " + formattedAmount+" VND");
+//        tvTotalExpenses.setText("Total expenses: " + formattedAmount+" VND");
     }
 
 
@@ -94,7 +94,7 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
 
     private void showAddExpenseDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Add Expense");
+        builder.setTitle("Add Budget");
 
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_expense, null);

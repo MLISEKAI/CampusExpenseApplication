@@ -28,26 +28,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="EXPENSES OVERVIEW"
+                android:text="Budget Management"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="#ff6c17"
-                android:layout_marginBottom="16dp"
-                />
-            <TextView
-                android:id="@+id/tvTotalExpenses"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total Expenses: 0 VND"
-                android:textColor="#00712D"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
                 />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Expense"
+                android:text="Add Budget"
                 android:id="@+id/btnAddExpense"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#ff6c17"
