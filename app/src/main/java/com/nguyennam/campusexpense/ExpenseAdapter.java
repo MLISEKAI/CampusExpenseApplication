@@ -20,10 +20,12 @@ import androidx.core.content.ContextCompat;
 
 import com.nguyennam.campusexpense.Model.BudgetModel;
 import com.nguyennam.campusexpense.Model.ExpenseModel;
+import com.nguyennam.campusexpense.SqliteDB.Budget;
 import com.nguyennam.campusexpense.SqliteDB.Expense;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -98,7 +100,7 @@ public class ExpenseAdapter extends BaseAdapter {
         // Find and set the views
         final EditText etTitle = dialogView.findViewById(R.id.etTitle);
         final EditText etAmount = dialogView.findViewById(R.id.etAmount);
-        final EditText etCategory = dialogView.findViewById(R.id.etCategory);
+        final TextView etCategory = dialogView.findViewById(R.id.etCategory); // Đổi thành TextView
         final EditText etDescription = dialogView.findViewById(R.id.etDescription);
         final EditText etDate = dialogView.findViewById(R.id.etDate);
 
@@ -111,32 +113,48 @@ public class ExpenseAdapter extends BaseAdapter {
         etDescription.setText(expense.getDescription());
         etDate.setText(expense.getDate());
 
+        // Fetch list of categories from Budget
+        Budget budgetDb = new Budget(context, null);
+        List<BudgetModel> budgetList = budgetDb.getAllBudget(expense.getUserCreatedId());
+        List<String> titleList = new ArrayList<>();
+        for (BudgetModel budget : budgetList) {
+            titleList.add(budget.getTitle());
+        }
+
+        // Set up click listener for category selection
+        etCategory.setOnClickListener(v -> {
+            CharSequence[] items = titleList.toArray(new CharSequence[0]);
+
+            AlertDialog.Builder categoryDialog = new AlertDialog.Builder(context);
+            categoryDialog.setTitle("Select Category");
+            categoryDialog.setItems(items, (dialog, which) -> {
+                etCategory.setText(titleList.get(which)); // Set selected category
+            });
+            categoryDialog.show();
+        });
+
         // Set up calendar and formatter for date selection
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-        // Set up click listener for etDate to show DatePickerDialog
         etDate.setOnClickListener(v -> {
             String[] dateParts = expense.getDate().split("/");
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            // If a valid date is already present, parse and set it as default
             if (dateParts.length == 3) {
                 year = Integer.parseInt(dateParts[2]);
-                month = Integer.parseInt(dateParts[1]) - 1; // Month is 0-based
+                month = Integer.parseInt(dateParts[1]) - 1;
                 day = Integer.parseInt(dateParts[0]);
             }
 
-            // Show DatePickerDialog
             new DatePickerDialog(context, (view, selectedYear, selectedMonth, selectedDay) -> {
                 calendar.set(selectedYear, selectedMonth, selectedDay);
                 etDate.setText(dateFormatter.format(calendar.getTime()));
             }, year, month, day).show();
         });
 
-        // Set dialog buttons
         builder.setPositiveButton("Save", (dialog, which) -> {
             String title = etTitle.getText().toString().trim();
             String amountText = etAmount.getText().toString().trim();
@@ -150,7 +168,7 @@ public class ExpenseAdapter extends BaseAdapter {
 
             try {
                 expense.setTitle(title);
-                expense.setAmount(Long.parseLong(amountText.replace(",", "")));
+                expense.setAmount(Long.parseLong(amountText.replace(".", "")));
                 expense.setCategory(category);
                 expense.setDescription(etDescription.getText().toString().trim());
                 expense.setDate(date);
@@ -179,7 +197,6 @@ public class ExpenseAdapter extends BaseAdapter {
             }
         });
 
-
         builder.setNegativeButton("Delete", (dialog, which) -> {
             Expense expenseDb = new Expense(context, null);
             boolean isDeleted = expenseDb.delete(expense.getId());
@@ -195,25 +212,24 @@ public class ExpenseAdapter extends BaseAdapter {
 
         builder.setNeutralButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        // Create and show the dialog
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        // Customize button colors after showing the dialog
+        // Customize button colors
         Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
         Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
 
         if (positiveButton != null) {
-            positiveButton.setTextColor(ContextCompat.getColor(context, R.color.colorAccent)); // Customize color
+            positiveButton.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
         }
 
         if (negativeButton != null) {
-            negativeButton.setTextColor(Color.RED); // Customize color to red
+            negativeButton.setTextColor(Color.RED);
         }
 
         if (neutralButton != null) {
-            neutralButton.setTextColor(Color.GRAY); // Customize color for Cancel button
+            neutralButton.setTextColor(Color.GRAY);
         }
     }
 

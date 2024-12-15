@@ -53,6 +53,12 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (!isValidPassword(password)) {
+            Toast.makeText(this, "Password must be at least 8 characters, include a number, an uppercase letter, and a special character.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         long result = new Account(this).insert(email, username, phone, password);
         if (result == -2) {
             Toast.makeText(RegisterActivity.this, "Email already exists!", Toast.LENGTH_SHORT).show();
@@ -66,6 +72,12 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private boolean isValidPassword(String password) {
+        // Regex kiểm tra mật khẩu
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+        return password.matches(passwordPattern);
     }
 
 

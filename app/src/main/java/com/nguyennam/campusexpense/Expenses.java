@@ -23,9 +23,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.nguyennam.campusexpense.Model.BudgetModel;
 import com.nguyennam.campusexpense.Model.ExpenseModel;
 import com.nguyennam.campusexpense.Model.User;
 import com.nguyennam.campusexpense.SqliteDB.Account;
+import com.nguyennam.campusexpense.SqliteDB.Budget;
 import com.nguyennam.campusexpense.SqliteDB.Expense;
 
 import java.text.DateFormat;
@@ -41,6 +43,7 @@ import java.util.Timer;
 public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdatedListener{
 
     private Expense db;
+    private Budget dbBudget;
     private ListView lvExpenses;
     private TextView tvTotalExpenses;
     private Button btnAddExpense;
@@ -55,6 +58,7 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
         View view = inflater.inflate(R.layout.fragment_expenses, container, false);
 
         db = new Expense(getContext(), null);
+        dbBudget = new Budget(getContext(), null);
         lvExpenses = view.findViewById(R.id.lvExpenses);
         tvTotalExpenses = view.findViewById(R.id.tvTotalExpenses);
         btnAddExpense = view.findViewById(R.id.btnAddExpense);
@@ -136,6 +140,29 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
 
             // Hiển thị DatePickerDialog
             datePickerDialog.show();
+        });
+
+        etCategory.setOnClickListener(v -> {
+            List<BudgetModel> categories = dbBudget.getAllTitleBudget(userId);
+
+            // Chuyển đổi danh sách `BudgetModel` thành danh sách chuỗi
+            List<String> titleList = new ArrayList<>();
+            for (BudgetModel budget : categories) {
+                titleList.add(budget.getTitle()); // Giả sử `getTitle()` trả về tiêu đề dạng String
+            }
+
+            // Chuyển đổi `List<String>` thành `CharSequence[]`
+            CharSequence[] items = titleList.toArray(new CharSequence[0]);
+
+            AlertDialog.Builder categoryBuilder = new AlertDialog.Builder(getContext());
+            categoryBuilder.setTitle("Choose a category");
+            categoryBuilder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    etCategory.setText(titleList.get(which)); // Lấy tiêu đề từ danh sách chuỗi
+                }
+            });
+            categoryBuilder.show();
         });
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {

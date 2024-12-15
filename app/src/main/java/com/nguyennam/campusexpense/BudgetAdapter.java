@@ -98,18 +98,21 @@ public class BudgetAdapter extends BaseAdapter {
 
         // Populate data into fields
         etTitle.setText(budget.getTitle());
+        etDescription.setText(budget.getDescription());
 
         // Set dialog buttons
         builder.setPositiveButton("Save", (dialog, which) -> {
             String title = etTitle.getText().toString().trim();
+            String description = etDescription.getText().toString().trim();
 
-            if (title.isEmpty()) {
+            if (title.isEmpty() || description.isEmpty()) {
                 Toast.makeText(context, "Please fill in all required fields.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             try {
                 budget.setTitle(title);
+                budget.setDescription(description);
 
                 Budget budgetDb = new Budget(context, null);
                 boolean isUpdated = budgetDb.update(

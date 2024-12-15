@@ -103,4 +103,24 @@ public class Budget extends SQLiteOpenHelper {
         cursor.close();
         return budgets;
     }
+
+    @SuppressLint("Range")
+    public List<BudgetModel> getAllTitleBudget(int userId) {
+        List<BudgetModel> budgets = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT " + TITLE + " FROM " + TABLE_NAME + " WHERE " + USER_CREATED_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                BudgetModel budget = new BudgetModel();
+                budget.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+                budgets.add(budget);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return budgets;
+    }
+
+
 }

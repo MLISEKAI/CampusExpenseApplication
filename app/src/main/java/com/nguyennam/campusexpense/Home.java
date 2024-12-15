@@ -94,6 +94,7 @@ public class Home extends Fragment implements BudgetAdapter.OnBudgetUpdatedListe
                     Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Create success", Toast.LENGTH_SHORT).show();
+                    loadBudgets();
                 }
             }
         });
