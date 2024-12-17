@@ -60,50 +60,104 @@ public class Home extends Fragment implements BudgetAdapter.OnBudgetUpdatedListe
         return view;
     }
 
+//    private void showAddBudgetDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle("Add Budget");
+//
+//        LayoutInflater inflater = getLayoutInflater();
+//        View dialogView = inflater.inflate(R.layout.dialog_add_budget, null);
+//
+//        builder.setView(dialogView);
+//
+//        final EditText etTitle = dialogView.findViewById(R.id.etTitleBudget);
+//        final EditText etDescription = dialogView.findViewById(R.id.etDescriptionBudget);
+//
+//        Calendar calendar = Calendar.getInstance();
+//
+//        // Định dạng chỉ hiển thị ngày
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+//
+//
+//        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                String title = etTitle.getText().toString().trim();
+//                String description = etDescription.getText().toString().trim();
+//
+//                if ( title.isEmpty() || description.isEmpty() ) {
+//                    Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                long data = db.insert(title, description, userId);
+//                if (data == -1) {
+//                    Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getContext(), "Create success", Toast.LENGTH_SHORT).show();
+//                    loadBudgets();
+//                }
+//            }
+//        });
+//
+//        builder.setNegativeButton("Cancel", null);
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
+
     private void showAddBudgetDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Budget");
 
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_budget, null);
-
         builder.setView(dialogView);
 
         final EditText etTitle = dialogView.findViewById(R.id.etTitleBudget);
         final EditText etDescription = dialogView.findViewById(R.id.etDescriptionBudget);
 
-        Calendar calendar = Calendar.getInstance();
+        builder.setPositiveButton("Save", null); // Set null to handle validation manually
+        builder.setNegativeButton("Cancel", null);
 
-        // Định dạng chỉ hiển thị ngày
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
-
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        // Manually set onClickListener for Positive Button
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 String title = etTitle.getText().toString().trim();
                 String description = etDescription.getText().toString().trim();
 
-                if ( title.isEmpty() || description.isEmpty() ) {
-                    Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                // Validation for Title
+                if (title.isEmpty()) {
+                    etTitle.setError("Title is required");
+                    etTitle.requestFocus();
                     return;
                 }
 
+                // Validation for Description
+                if (description.isEmpty()) {
+                    etDescription.setError("Description is required");
+                    etDescription.requestFocus();
+                    return;
+                }
+
+                // If validation passes, insert data
                 long data = db.insert(title, description, userId);
                 if (data == -1) {
                     Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Create success", Toast.LENGTH_SHORT).show();
                     loadBudgets();
+                    dialog.dismiss(); // Close dialog on successful save
                 }
             }
         });
-
-        builder.setNegativeButton("Cancel", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
+
+
 
     private void loadBudgets() {
         budgetList = db.getAllBudget(userId);

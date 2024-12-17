@@ -111,10 +111,10 @@ public class Account extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public User getUserInfo(String username, String password) {
+    public User getUserInfo(String input, String password) {
         SQLiteDatabase db = getReadableDatabase();
-        String selection = USERNAME + " = ? AND " + PASSWORD + " = ?";
-        String[] selectionArgs = { username, password };
+        String selection = "(" + USERNAME + " = ? OR " + EMAIL + " = ?) AND " + PASSWORD + " = ?";
+        String[] selectionArgs = { input, input, password };
 
         Cursor cursor = db.query(
                 TABLE_NAME,
@@ -138,6 +138,7 @@ public class Account extends SQLiteOpenHelper {
         }
         return user;
     }
+
 
 
 

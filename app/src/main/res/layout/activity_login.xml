@@ -50,7 +50,7 @@
                     android:id="@+id/usernameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Username"
+                    android:hint="Username or Email"
                     android:inputType="textPersonName"
                     android:textColor="#ff6c17"
                     />

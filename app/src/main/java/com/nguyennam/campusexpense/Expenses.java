@@ -96,13 +96,120 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
     }
 
 
+//    private void showAddExpenseDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle("Add Expense");
+//
+//        LayoutInflater inflater = getLayoutInflater();
+//        View dialogView = inflater.inflate(R.layout.dialog_add_expense, null);
+//
+//        builder.setView(dialogView);
+//
+//        final EditText etAmount = dialogView.findViewById(R.id.etAmount);
+//        final EditText etTitle = dialogView.findViewById(R.id.etTitle);
+//        final EditText etDescription = dialogView.findViewById(R.id.etDescription);
+//        final EditText etCategory = dialogView.findViewById(R.id.etCategory);
+//        final EditText etDate = dialogView.findViewById(R.id.etDate);
+//
+//        Calendar calendar = Calendar.getInstance();
+//
+//        // Định dạng chỉ hiển thị ngày
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+//
+//        // Hiển thị lịch khi người dùng bấm vào EditText
+//        etDate.setOnClickListener(v -> {
+//            // Lấy ngày, tháng, năm hiện tại từ Calendar
+//            int year = calendar.get(Calendar.YEAR);
+//            int month = calendar.get(Calendar.MONTH);
+//            int day = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//            // Tạo DatePickerDialog
+//            DatePickerDialog datePickerDialog = new DatePickerDialog(
+//                    getContext(),
+//                    (view, selectedYear, selectedMonth, selectedDay) -> {
+//                        // Cập nhật Calendar với ngày được chọn
+//                        calendar.set(Calendar.YEAR, selectedYear);
+//                        calendar.set(Calendar.MONTH, selectedMonth);
+//                        calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+//
+//                        // Định dạng lại ngày và hiển thị trong EditText
+//                        etDate.setText(formatter.format(calendar.getTime()));
+//                    },
+//                    year, month, day
+//            );
+//
+//            // Hiển thị DatePickerDialog
+//            datePickerDialog.show();
+//        });
+//
+//        etCategory.setOnClickListener(v -> {
+//            List<BudgetModel> categories = dbBudget.getAllTitleBudget(userId);
+//
+//            // Chuyển đổi danh sách `BudgetModel` thành danh sách chuỗi
+//            List<String> titleList = new ArrayList<>();
+//            for (BudgetModel budget : categories) {
+//                titleList.add(budget.getTitle()); // Giả sử `getTitle()` trả về tiêu đề dạng String
+//            }
+//
+//            // Chuyển đổi `List<String>` thành `CharSequence[]`
+//            CharSequence[] items = titleList.toArray(new CharSequence[0]);
+//
+//            AlertDialog.Builder categoryBuilder = new AlertDialog.Builder(getContext());
+//            categoryBuilder.setTitle("Choose a category");
+//            categoryBuilder.setItems(items, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    etCategory.setText(titleList.get(which)); // Lấy tiêu đề từ danh sách chuỗi
+//                }
+//            });
+//            categoryBuilder.show();
+//        });
+//
+//        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                String amountText = etAmount.getText().toString().trim();
+//                String title = etTitle.getText().toString().trim();
+//                String description = etDescription.getText().toString().trim();
+//                String category = etCategory.getText().toString().trim();
+//                String date = etDate.getText().toString().trim();
+//
+//                if (amountText.isEmpty() || title.isEmpty() || description.isEmpty() || category.isEmpty() || date.isEmpty()) {
+//                    Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                long amount;
+//                try {
+//                    amount = Long.parseLong(amountText);
+//                } catch (NumberFormatException e) {
+//                    Toast.makeText(getContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                long data = db.insert(amount, title, description, category, date, userId);
+//                if (data == -1) {
+//                    Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getContext(), "Create success", Toast.LENGTH_SHORT).show();
+//                    loadTotalExpenses();
+//                    loadExpenses();
+//                }
+//            }
+//        });
+//
+//        builder.setNegativeButton("Cancel", null);
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
+
     private void showAddExpenseDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Expense");
 
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_expense, null);
-
         builder.setView(dialogView);
 
         final EditText etAmount = dialogView.findViewById(R.id.etAmount);
@@ -112,97 +219,112 @@ public class Expenses extends Fragment implements ExpenseAdapter.OnExpenseUpdate
         final EditText etDate = dialogView.findViewById(R.id.etDate);
 
         Calendar calendar = Calendar.getInstance();
-
-        // Định dạng chỉ hiển thị ngày
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-        // Hiển thị lịch khi người dùng bấm vào EditText
+        // Date Picker logic
         etDate.setOnClickListener(v -> {
-            // Lấy ngày, tháng, năm hiện tại từ Calendar
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            // Tạo DatePickerDialog
             DatePickerDialog datePickerDialog = new DatePickerDialog(
                     getContext(),
                     (view, selectedYear, selectedMonth, selectedDay) -> {
-                        // Cập nhật Calendar với ngày được chọn
-                        calendar.set(Calendar.YEAR, selectedYear);
-                        calendar.set(Calendar.MONTH, selectedMonth);
-                        calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
-
-                        // Định dạng lại ngày và hiển thị trong EditText
+                        calendar.set(selectedYear, selectedMonth, selectedDay);
                         etDate.setText(formatter.format(calendar.getTime()));
-                    },
-                    year, month, day
+                    }, year, month, day
             );
-
-            // Hiển thị DatePickerDialog
             datePickerDialog.show();
         });
 
+        // Category Picker logic
         etCategory.setOnClickListener(v -> {
             List<BudgetModel> categories = dbBudget.getAllTitleBudget(userId);
-
-            // Chuyển đổi danh sách `BudgetModel` thành danh sách chuỗi
             List<String> titleList = new ArrayList<>();
             for (BudgetModel budget : categories) {
-                titleList.add(budget.getTitle()); // Giả sử `getTitle()` trả về tiêu đề dạng String
+                titleList.add(budget.getTitle());
             }
 
-            // Chuyển đổi `List<String>` thành `CharSequence[]`
             CharSequence[] items = titleList.toArray(new CharSequence[0]);
-
             AlertDialog.Builder categoryBuilder = new AlertDialog.Builder(getContext());
             categoryBuilder.setTitle("Choose a category");
-            categoryBuilder.setItems(items, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    etCategory.setText(titleList.get(which)); // Lấy tiêu đề từ danh sách chuỗi
-                }
-            });
+            categoryBuilder.setItems(items, (dialog, which) -> etCategory.setText(titleList.get(which)));
             categoryBuilder.show();
         });
 
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String amountText = etAmount.getText().toString().trim();
-                String title = etTitle.getText().toString().trim();
-                String description = etDescription.getText().toString().trim();
-                String category = etCategory.getText().toString().trim();
-                String date = etDate.getText().toString().trim();
-
-                if (amountText.isEmpty() || title.isEmpty() || description.isEmpty() || category.isEmpty() || date.isEmpty()) {
-                    Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                long amount;
-                try {
-                    amount = Long.parseLong(amountText);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                long data = db.insert(amount, title, description, category, date, userId);
-                if (data == -1) {
-                    Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Create success", Toast.LENGTH_SHORT).show();
-                    loadTotalExpenses();
-                    loadExpenses();
-                }
-            }
-        });
-
+        builder.setPositiveButton("Save", null); // Custom handler
         builder.setNegativeButton("Cancel", null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        // Custom click listener for Save button
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(v -> {
+            String amountText = etAmount.getText().toString().trim();
+            String title = etTitle.getText().toString().trim();
+            String description = etDescription.getText().toString().trim();
+            String category = etCategory.getText().toString().trim();
+            String date = etDate.getText().toString().trim();
+
+            // Validation logic
+            if (amountText.isEmpty()) {
+                etAmount.setError("Amount is required");
+                etAmount.requestFocus();
+                return;
+            }
+
+            long amount;
+            try {
+                amount = Long.parseLong(amountText);
+                if (amount <= 0) {
+                    etAmount.setError("Amount must be greater than zero");
+                    etAmount.requestFocus();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                etAmount.setError("Invalid amount format");
+                etAmount.requestFocus();
+                return;
+            }
+
+            if (title.isEmpty()) {
+                etTitle.setError("Title is required");
+                etTitle.requestFocus();
+                return;
+            }
+
+            if (description.isEmpty()) {
+                etDescription.setError("Description is required");
+                etDescription.requestFocus();
+                return;
+            }
+
+            if (category.isEmpty()) {
+                etCategory.setError("Category is required");
+                etCategory.requestFocus();
+                return;
+            }
+
+            if (date.isEmpty()) {
+                etDate.setError("Date is required");
+                etDate.requestFocus();
+                return;
+            }
+
+            // Save the data if all fields are valid
+            long data = db.insert(amount, title, description, category, date, userId);
+            if (data == -1) {
+                Toast.makeText(getContext(), "Create failed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Create success", Toast.LENGTH_SHORT).show();
+                loadTotalExpenses();
+                loadExpenses();
+                dialog.dismiss();
+            }
+        });
     }
+
 
 
     @Override

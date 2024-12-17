@@ -78,6 +78,24 @@ public class Profile extends Fragment {
         String oldPassword = edtOldPassword.getText().toString().trim();
         String newPassword = edtNewPassword.getText().toString().trim();
 
+        if (username.isEmpty()) {
+            edtUsername.setError("Amount is required");
+            edtUsername.requestFocus();
+            return;
+        }
+
+        if (email.isEmpty()) {
+            edtEmail.setError("Amount is required");
+            edtEmail.requestFocus();
+            return;
+        }
+
+        if (phone.isEmpty()) {
+            edtPhone.setError("Amount is required");
+            edtPhone.requestFocus();
+            return;
+        }
+
         // Kiểm tra mật khẩu cũ
         User user = accountDatabase.getUserInfo(username, oldPassword);
         if (user == null) {
@@ -86,10 +104,10 @@ public class Profile extends Fragment {
         }
 
         // Kiểm tra các trường thông tin
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(phone)) {
-            Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(phone)) {
+//            Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         // Cập nhật thông tin người dùng
         boolean isUpdated = accountDatabase.update(email, username, phone, TextUtils.isEmpty(newPassword) ? oldPassword : newPassword);
