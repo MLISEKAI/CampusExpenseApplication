@@ -143,8 +143,28 @@ public class Account extends SQLiteOpenHelper {
 
 
 
+//    public boolean update(String email, String username, String phone, String password) {
+//        SQLiteDatabase db = getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put(EMAIL, email);
+//        values.put(USERNAME, username);
+//        values.put(PHONE, phone);
+//        values.put(PASSWORD, password);
+//
+//        String selection = USERNAME + " = ?";
+//        String[] selectionArgs = { username };
+//
+//        return db.update(TABLE_NAME, values, selection, selectionArgs) > 0;
+//    }
+
     public boolean update(String email, String username, String phone, String password) {
         SQLiteDatabase db = getWritableDatabase();
+
+        // Kiểm tra xem email có tồn tại và không thuộc về user đang cập nhật
+        if (isEmailExistsForOtherUser(email, username)) {
+            return false; // Email đã tồn tại
+        }
+
         ContentValues values = new ContentValues();
         values.put(EMAIL, email);
         values.put(USERNAME, username);
@@ -156,5 +176,15 @@ public class Account extends SQLiteOpenHelper {
 
         return db.update(TABLE_NAME, values, selection, selectionArgs) > 0;
     }
+
+    private boolean isEmailExistsForOtherUser(String email, String currentUsername) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + EMAIL + " = ? AND " + USERNAME + " != ?";
+        Cursor cursor = db.rawQuery(query, new String[]{email, currentUsername});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
 
 }

@@ -84,6 +84,95 @@ public class BudgetAdapter extends BaseAdapter {
         return convertView;
     }
 
+//    private void showExpenseDetails(final BudgetModel budget) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setTitle("Budget Details");
+//
+//        // Inflate the custom layout for dialog
+//        View dialogView = inflater.inflate(R.layout.dialog_budget_details, null);
+//        builder.setView(dialogView);
+//
+//        // Find and set the views
+//        final EditText etTitle = dialogView.findViewById(R.id.etTitle);
+//        final EditText etDescription = dialogView.findViewById(R.id.etDescription);
+//
+//        // Populate data into fields
+//        etTitle.setText(budget.getTitle());
+//        etDescription.setText(budget.getDescription());
+//
+//        // Set dialog buttons
+//        builder.setPositiveButton("Save", (dialog, which) -> {
+//            String title = etTitle.getText().toString().trim();
+//            String description = etDescription.getText().toString().trim();
+//
+//            if (title.isEmpty() || description.isEmpty()) {
+//                Toast.makeText(context, "Please fill in all required fields.", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            try {
+//                budget.setTitle(title);
+//                budget.setDescription(description);
+//
+//                Budget budgetDb = new Budget(context, null);
+//                boolean isUpdated = budgetDb.update(
+//                        budget.getId(),
+//                        budget.getTitle(),
+//                        budget.getDescription(),
+//                        budget.getUserCreatedId()
+//                );
+//
+//                if (isUpdated) {
+//                    if (listener != null) {
+//                        listener.onBudgetUpdated();
+//                    }
+//                    Toast.makeText(context, "Expense updated successfully!", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(context, "Failed to update expense.", Toast.LENGTH_SHORT).show();
+//                }
+//            } catch (NumberFormatException e) {
+//                Toast.makeText(context, "Invalid amount entered.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//
+//        builder.setNegativeButton("Delete", (dialog, which) -> {
+//            Budget budgetDb = new Budget(context, null);
+//            boolean isDeleted = budgetDb.delete(budget.getId());
+//            if (isDeleted) {
+//                if (listener != null) {
+//                    listener.onBudgetUpdated();
+//                }
+//                Toast.makeText(context, "Expense deleted successfully!", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(context, "Failed to delete expense.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        builder.setNeutralButton("Cancel", (dialog, which) -> dialog.dismiss());
+//
+//        // Create and show the dialog
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//
+//        // Customize button colors after showing the dialog
+//        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+//        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+//        Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+//
+//        if (positiveButton != null) {
+//            positiveButton.setTextColor(ContextCompat.getColor(context, R.color.colorAccent)); // Customize color
+//        }
+//
+//        if (negativeButton != null) {
+//            negativeButton.setTextColor(Color.RED); // Customize color to red
+//        }
+//
+//        if (neutralButton != null) {
+//            neutralButton.setTextColor(Color.GRAY); // Customize color for Cancel button
+//        }
+//    }
+
     private void showExpenseDetails(final BudgetModel budget) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Budget Details");
@@ -100,14 +189,29 @@ public class BudgetAdapter extends BaseAdapter {
         etTitle.setText(budget.getTitle());
         etDescription.setText(budget.getDescription());
 
-        // Set dialog buttons
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setPositiveButton("Save", null); // Set null for custom handling
+        builder.setNegativeButton("Delete", null);
+        builder.setNeutralButton("Cancel", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Manually handle Save button click
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(v -> {
             String title = etTitle.getText().toString().trim();
             String description = etDescription.getText().toString().trim();
 
-            if (title.isEmpty() || description.isEmpty()) {
-                Toast.makeText(context, "Please fill in all required fields.", Toast.LENGTH_SHORT).show();
-                return;
+            if (title.isEmpty()) {
+                etTitle.setError("Title is required");
+                etTitle.requestFocus();
+                return; // Do not close dialog
+            }
+
+            if (description.isEmpty()) {
+                etDescription.setError("Description is required");
+                etDescription.requestFocus();
+                return; // Do not close dialog
             }
 
             try {
@@ -126,52 +230,39 @@ public class BudgetAdapter extends BaseAdapter {
                     if (listener != null) {
                         listener.onBudgetUpdated();
                     }
-                    Toast.makeText(context, "Expense updated successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Budget updated successfully!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss(); // Close dialog only if save succeeds
                 } else {
-                    Toast.makeText(context, "Failed to update expense.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Failed to update budget.", Toast.LENGTH_SHORT).show();
                 }
             } catch (NumberFormatException e) {
-                Toast.makeText(context, "Invalid amount entered.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Invalid input format.", Toast.LENGTH_SHORT).show();
             }
         });
 
-
-        builder.setNegativeButton("Delete", (dialog, which) -> {
+        // Handle Delete button click
+        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setOnClickListener(v -> {
             Budget budgetDb = new Budget(context, null);
             boolean isDeleted = budgetDb.delete(budget.getId());
             if (isDeleted) {
                 if (listener != null) {
                     listener.onBudgetUpdated();
                 }
-                Toast.makeText(context, "Expense deleted successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Budget deleted successfully!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             } else {
-                Toast.makeText(context, "Failed to delete expense.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Failed to delete budget.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNeutralButton("Cancel", (dialog, which) -> dialog.dismiss());
-
-        // Create and show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        // Customize button colors after showing the dialog
-        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        // Customize button colors
+        positiveButton.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        negativeButton.setTextColor(Color.RED);
         Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-
-        if (positiveButton != null) {
-            positiveButton.setTextColor(ContextCompat.getColor(context, R.color.colorAccent)); // Customize color
-        }
-
-        if (negativeButton != null) {
-            negativeButton.setTextColor(Color.RED); // Customize color to red
-        }
-
-        if (neutralButton != null) {
-            neutralButton.setTextColor(Color.GRAY); // Customize color for Cancel button
-        }
+        neutralButton.setTextColor(Color.GRAY);
     }
+
 
 
 

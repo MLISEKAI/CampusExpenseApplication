@@ -79,19 +79,19 @@ public class Profile extends Fragment {
         String newPassword = edtNewPassword.getText().toString().trim();
 
         if (username.isEmpty()) {
-            edtUsername.setError("Amount is required");
+            edtUsername.setError("Username is required");
             edtUsername.requestFocus();
             return;
         }
 
         if (email.isEmpty()) {
-            edtEmail.setError("Amount is required");
+            edtEmail.setError("Email is required");
             edtEmail.requestFocus();
             return;
         }
 
         if (phone.isEmpty()) {
-            edtPhone.setError("Amount is required");
+            edtPhone.setError("Phone number is required");
             edtPhone.requestFocus();
             return;
         }
@@ -110,10 +110,19 @@ public class Profile extends Fragment {
 //        }
 
         // Cập nhật thông tin người dùng
+//        boolean isUpdated = accountDatabase.update(email, username, phone, TextUtils.isEmpty(newPassword) ? oldPassword : newPassword);
+
         boolean isUpdated = accountDatabase.update(email, username, phone, TextUtils.isEmpty(newPassword) ? oldPassword : newPassword);
+
+        if (!isUpdated) {
+            Toast.makeText(getContext(), "Email already exists. Please try again!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (isUpdated) {
             // Lưu lại thông tin mới vào SharedPreferences
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences(
+                    "UserSession", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("email", email);
             editor.putString("phone", phone);
